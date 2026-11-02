@@ -1,0 +1,6 @@
+{
+  "version": "1.0",
+  "url": "https://github.com/foxfoxesfox/Peel/raw/main/dist/Peel.dmg",
+  "sha256": "05901dbbfed7640c1c6c1060cac9ccf69c8af16a864948f9be7bbd70ace0f65e",
+  "notes": "First version.\n\n### Added\n- **One shortcut** (\u21e7\u23182) to capture an area, or a window with Space. The menu bar icon also captures a window or the full screen.\n- **The shelf** (\u21e7\u23181): every capture, newest first. Click to copy, drag into any app, pin on screen, save as PNG or JPG, or move to the Trash.\n- **Edit:** arrow, box, highlight, text, solid redaction and crop, in six colours. Done adds an edited copy; the original stays.\n- **Copy text** out of any capture, and **search** captures by the words in them. Read on your Mac with Apple's Vision; nothing is uploaded.\n- **Welcome tour** on first launch (permission, shortcuts, how to use, settings), then no windows at launch ever again. Launch at Login in Settings.\n- Captures are kept for a month by default (1 day to forever); older ones go to the Trash.\n- Updates itself from GitHub, like Swivel, and only accepts updates signed with the same developer certificate."
+}

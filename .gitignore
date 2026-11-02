@@ -1,0 +1,31 @@
+# Build output (dist/ IS committed: it holds the DMG and the update feed)
+.build/
+build.noindex/
+.swiftpm/
+
+# Claude and other private notes
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+graphify-out/
+
+# Signing: never upload certificates or private keys
+*.p12
+*.pfx
+*.cer
+*.pem
+*.key
+*.certSigningRequest
+*.keychain
+*.keychain-db
+*.mobileprovision
+
+# Secrets and local settings
+.env
+.env.*
+.vscode/
+.idea/
+*.xcuserdatad/
+
+# macOS
+.DS_Store
