@@ -28,10 +28,10 @@ After a capture, Peel copies it to the clipboard and shows the shelf for a few s
 
 - **Click** a capture to copy it again. **Drag** it into any app or folder.
 - **Double-click** (or the pencil) to **edit**: Arrow (A), Box (R), Highlight (H), Text (T), Redact (B), Crop (C), with six colours, Undo (⌘Z or Delete). **Done** (Return) adds an edited copy to the shelf and copies it; the original stays.
-- Hover for buttons: **Copy**, **Copy Text** (the words Peel read in it), **Pin** (floats above every window; Esc closes it), **Edit**, **Save** (a PNG or JPG copy in your save folder, `~/Pictures/Peel` by default), **Move to Trash**. Right-click shows the same actions.
+- Hover for buttons: **Copy**, **Copy Text** (the words Peel read in it), **Pin** (floats above every window; Esc closes it), **Edit**, **Save** (adds a PNG or JPG copy to your Photos library, or to a folder you pick in Settings), **Move to Trash**. Right-click shows the same actions. The first Save to Photos asks for permission to *add* photos only; Peel can't see or read your library.
 - **Search** finds captures by the text in them. Every word you type has to appear, in any order.
 
-Captures stay on the shelf for a month by default (1 day to forever, in Settings). Older ones go to the Trash, not straight to deletion, and saved copies are never touched. They live in `~/Library/Application Support/Peel/Captures` (**Show in Finder** in Settings).
+Captures stay on the shelf for a month by default (1 day to forever, in Settings). Older ones go to the Trash, not straight to deletion, and saved copies are never touched. They live in Peel's own folder, `~/Library/Application Support/Peel/Captures` (**Shelf captures › Show in Finder** in Settings), separate from what you save.
 
 **Redact** draws solid black into the exported pixels, so the hidden text is gone from the edited copy, not just covered. The original capture still has it: trash the original if it shouldn't be kept.
 

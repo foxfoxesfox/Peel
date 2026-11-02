@@ -59,6 +59,8 @@ final class Prefs: ObservableObject {
     @Published var playSound: Bool { didSet { d.set(playSound, forKey: "playSound") } }
     /// How long captures stay on the shelf; 0 = forever.
     @Published var keepDays: Int { didSet { d.set(keepDays, forKey: "keepDays") } }
+    /// Save adds to the Photos library (default) or writes into saveFolder.
+    @Published var saveToPhotos: Bool { didSet { d.set(saveToPhotos, forKey: "saveToPhotos") } }
     @Published var saveFolder: String { didSet { d.set(saveFolder, forKey: "saveFolder") } }
     @Published var saveFormat: SaveFormat { didSet { d.set(saveFormat.rawValue, forKey: "saveFormat") } }
     @Published var autoUpdate: Bool { didSet { d.set(autoUpdate, forKey: "autoUpdate") } }
@@ -67,7 +69,8 @@ final class Prefs: ObservableObject {
 
     private init() {
         d.register(defaults: ["copyAfterCapture": true, "showShelfAfterCapture": true, "playSound": true, "keepDays": 30,
-                              "saveFolder": NSHomeDirectory() + "/Pictures/Peel", "saveFormat": "png", "autoUpdate": true])
+                              "saveToPhotos": true, "saveFolder": NSHomeDirectory() + "/Pictures/Peel", "saveFormat": "png",
+                              "autoUpdate": true])
         let load = { (key: String) in UserDefaults.standard.data(forKey: key).flatMap { try? JSONDecoder().decode(Shortcut.self, from: $0) } }
         captureShortcut = load("captureShortcut") ?? .capture
         shelfShortcut = load("shelfShortcut") ?? .shelf
@@ -75,10 +78,14 @@ final class Prefs: ObservableObject {
         showShelfAfterCapture = d.bool(forKey: "showShelfAfterCapture")
         playSound = d.bool(forKey: "playSound")
         keepDays = d.integer(forKey: "keepDays")
+        saveToPhotos = d.bool(forKey: "saveToPhotos")
         saveFolder = d.string(forKey: "saveFolder")!
         saveFormat = SaveFormat(rawValue: d.string(forKey: "saveFormat") ?? "") ?? .png
         autoUpdate = d.bool(forKey: "autoUpdate")
     }
+
+    /// Where Save puts things, for button labels: "Photos" or the folder's name.
+    var saveTarget: String { saveToPhotos ? "Photos" : (saveFolder as NSString).lastPathComponent }
 
     private func save(_ shortcut: Shortcut, _ key: String) { d.set(try? JSONEncoder().encode(shortcut), forKey: key) }
 }

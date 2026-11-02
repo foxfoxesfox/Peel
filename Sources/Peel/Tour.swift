@@ -387,30 +387,46 @@ struct LibraryRows: View {
             Text("Older ones go to the Trash, so you can still get them back for a while. Saved copies are never touched.")
                 .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
         }
-        HStack {
-            Text("Save to")
-            Spacer()
-            Text((prefs.saveFolder as NSString).abbreviatingWithTildeInPath).foregroundStyle(.secondary)
-                .lineLimit(1).truncationMode(.middle)
-            Button("Choose…") {
-                let panel = NSOpenPanel()
-                panel.canChooseFiles = false
-                panel.canChooseDirectories = true
-                panel.canCreateDirectories = true
-                panel.prompt = "Choose"
-                panel.message = "Where Save puts copies of your captures."
-                NSApp.activate(ignoringOtherApps: true)
-                if panel.runModal() == .OK, let url = panel.url { prefs.saveFolder = url.path }
+        VStack(alignment: .leading, spacing: 4) {
+            Picker("Save button adds to", selection: $prefs.saveToPhotos) {
+                Text("Photos").tag(true)
+                Text("A folder").tag(false)
+            }
+            Text(prefs.saveToPhotos
+                 ? "Only the captures you save. macOS asks once to let Peel add photos; Peel can't see your library. With iCloud Photos on, they sync like any photo."
+                 : "Only the captures you save go here, as copies to keep.")
+                .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+        }
+        if !prefs.saveToPhotos {
+            HStack {
+                Text("Folder")
+                Spacer()
+                Text((prefs.saveFolder as NSString).abbreviatingWithTildeInPath).foregroundStyle(.secondary)
+                    .lineLimit(1).truncationMode(.middle)
+                Button("Choose…") {
+                    let panel = NSOpenPanel()
+                    panel.canChooseFiles = false
+                    panel.canChooseDirectories = true
+                    panel.canCreateDirectories = true
+                    panel.prompt = "Choose"
+                    panel.message = "Where Save puts copies of your captures."
+                    NSApp.activate(ignoringOtherApps: true)
+                    if panel.runModal() == .OK, let url = panel.url { prefs.saveFolder = url.path }
+                }
             }
         }
         Picker("Save as", selection: $prefs.saveFormat) {
             Text("PNG (sharpest)").tag(SaveFormat.png)
             Text("JPG (smaller)").tag(SaveFormat.jpg)
         }
-        HStack {
-            Text("All captures")
-            Spacer()
-            Button("Show in Finder") { NSWorkspace.shared.open(Library.shared.dir) }
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Shelf captures")
+                Spacer()
+                Button("Show in Finder") { NSWorkspace.shared.open(Library.shared.dir) }
+            }
+            Text("Every capture is kept here automatically for the shelf and search, separate from what you save.")
+                .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
         }
     }
 }

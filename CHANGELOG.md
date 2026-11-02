@@ -3,6 +3,14 @@
 All notable changes to Peel. Newest first.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## [1.1] - 2026-11-02
+
+Save straight to Photos.
+
+### Changed
+- **Save adds to your Photos library** by default. macOS asks once, the first time, for permission to add photos only: Peel can't see or read your library. Prefer a folder? Settings › Captures › "Save button adds to" › A folder.
+- Settings explain the difference between your saved copies and the shelf's own captures folder.
+
 ## [1.0] - 2026-11-02
 
 First version.

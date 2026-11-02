@@ -186,7 +186,7 @@ struct ShelfView: View {
             Button("Copy Text") { copyText(c) }
             Button("Edit…") { model.onEdit(c) }
             Button("Pin on Screen") { model.onPin(c) }
-            Button("Save to \(folderName)") { save(c, file) }
+            Button("Save to \(prefs.saveTarget)") { save(c, file) }
             Button("Show in Finder") { NSWorkspace.shared.activateFileViewerSelecting([file]) }
             Divider()
             Button("Move to Trash") { library.remove(c) }
@@ -208,7 +208,7 @@ struct ShelfView: View {
             icon("text.viewfinder", "Copy text") { copyText(c) }
             icon("pin", "Pin on screen") { model.onPin(c) }
             icon("pencil.tip", "Edit") { model.onEdit(c) }
-            icon("square.and.arrow.down", "Save to \(folderName)") { save(c, file) }
+            icon("square.and.arrow.down", "Save to \(prefs.saveTarget)") { save(c, file) }
             icon("trash", "Move to Trash") { library.remove(c) }
         }
         .padding(3)
@@ -222,8 +222,6 @@ struct ShelfView: View {
             .help(help)
             .accessibilityLabel(help)
     }
-
-    private var folderName: String { (prefs.saveFolder as NSString).lastPathComponent }
 
     /// The date, or while searching, the line of text that matched.
     private func caption(_ c: Capture) -> String {
@@ -247,6 +245,14 @@ struct ShelfView: View {
     }
 
     private func save(_ c: Capture, _ file: URL) {
+        if prefs.saveToPhotos {
+            model.say("Adding…", on: c)
+            return Library.addToPhotos(file, format: prefs.saveFormat) { [model] error in
+                guard let error else { return model.say("Added to Photos", on: c) }
+                model.say("Couldn't save", on: c)
+                NSAlert(error: error).runModal()
+            }
+        }
         do {
             let out = try Library.export(file, to: URL(fileURLWithPath: prefs.saveFolder), format: prefs.saveFormat)
             model.say("Saved as \(out.pathExtension.uppercased())", on: c)

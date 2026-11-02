@@ -39,11 +39,12 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>PeelUpdateFeed</key><string>https://raw.githubusercontent.com/$REPO/main/dist/latest.json</string>
     <key>PeelHomepage</key><string>https://github.com/$REPO</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>1.0</string>
-    <key>CFBundleVersion</key><string>1</string>
+    <key>CFBundleShortVersionString</key><string>1.1</string>
+    <key>CFBundleVersion</key><string>2</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
+    <key>NSPhotoLibraryAddUsageDescription</key><string>Peel adds the captures you save to your Photos library. It can't see or read your library.</string>
 </dict>
 </plist>
 PLIST

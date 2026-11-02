@@ -1,5 +1,6 @@
 import AppKit
 import ImageIO
+import Photos
 import UniformTypeIdentifiers
 import Vision
 
@@ -156,6 +157,30 @@ final class Library: ObservableObject {
         CGImageDestinationAddImage(dest, flattened(image), [kCGImageDestinationLossyCompressionQuality: 0.9] as CFDictionary)
         guard CGImageDestinationFinalize(dest) else { throw PeelError("Couldn't write \(out.lastPathComponent).") }
         return out
+    }
+
+    /// Adds a copy to the Photos library. macOS asks once for "add only" access, which can't see or read the library.
+    /// Calls back on the main thread with nil on success.
+    static func addToPhotos(_ file: URL, format: SaveFormat, completion: @escaping (Error?) -> Void) {
+        let done = { (error: Error?) in DispatchQueue.main.async { completion(error) } }
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else {
+                return done(PeelError("Peel isn't allowed to add to Photos. Turn it on in System Settings › Privacy & Security › Photos, or make Save use a folder in Peel's Settings."))
+            }
+            let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("peel-photos-\(UUID().uuidString)")
+            do {
+                let out = try export(file, to: tmp, format: format) // the chosen format, PNG or JPG
+                PHPhotoLibrary.shared().performChanges({
+                    PHAssetCreationRequest.forAsset().addResource(with: .photo, fileURL: out, options: nil)
+                }) { _, error in
+                    try? FileManager.default.removeItem(at: tmp)
+                    done(error)
+                }
+            } catch {
+                try? FileManager.default.removeItem(at: tmp)
+                done(error)
+            }
+        }
     }
 
     /// JPG has no transparency (window shadows): put the image on white first.
