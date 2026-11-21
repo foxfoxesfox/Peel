@@ -82,6 +82,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc func captureWindow() { capture(.window) }
     @objc func captureScreen() { capture(.screen) }
     @objc func showShelf() { shelf.show() }
+    @objc func clearShelf() {
+        NSApp.activate(ignoringOtherApps: true)
+        shelf.clear()
+    }
 
     func edit(_ capture: Capture) {
         guard let editor = Editor(capture: capture, library: library) else {
@@ -146,6 +150,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         menu.addItem(.separator())
         _ = add("Show Shelf", #selector(showShelf), symbol: "tray.full", shortcut: prefs.shelfShortcut)
+        _ = add("Clear Shelf…", library.items.isEmpty ? nil : #selector(clearShelf), symbol: "trash")
         menu.addItem(.separator())
         if let release = updater.release {
             _ = add("Update to Peel \(release.version)…", #selector(showUpdateWindow), symbol: "arrow.down.circle.fill")

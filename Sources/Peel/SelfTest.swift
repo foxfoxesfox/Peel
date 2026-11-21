@@ -46,6 +46,16 @@ enum SelfTest {
         let after = (try? Library.text(in: out)) ?? ""
         check(!after.contains("9876") && after.contains("48213"), "redaction removes the hidden text only")
 
+        // A pen stroke across the empty middle must land in the pixels, in its colour.
+        let pen = Mark(tool: .pen, a: CGPoint(x: 600, y: 140), b: CGPoint(x: 800, y: 140), color: CGColor(srgbRed: 1, green: 0, blue: 0, alpha: 1),
+                       points: [CGPoint(x: 600, y: 140), CGPoint(x: 700, y: 145), CGPoint(x: 800, y: 140)])
+        let inked = Canvas.render(source, [pen])!
+        var px = [UInt8](repeating: 0, count: 4)
+        let probe = CGContext(data: &px, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4,
+                              space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        probe.draw(inked, in: CGRect(x: -700, y: -145, width: CGFloat(w), height: CGFloat(h))) // the pixel at (700, 145), mid-stroke
+        check(px[0] > 200 && px[1] < 80 && px[2] < 80, "pen stroke is drawn in its colour (got \(px[0]),\(px[1]),\(px[2]))")
+
         // Crop to the top half.
         let crop = Mark(tool: .crop, a: CGPoint(x: 0, y: 150), b: CGPoint(x: 600, y: 300), color: .black)
         let cropped = Canvas.render(source, [redact, crop])!

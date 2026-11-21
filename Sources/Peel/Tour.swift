@@ -124,7 +124,7 @@ struct WelcomeView: View {
             VStack(alignment: .leading, spacing: 16) {
                 feature("keyboard", "One shortcut", "Press \(prefs.captureShortcut.title) and drag. No more remembering which number does what.")
                 feature("tray.full", "A shelf for your captures", "Copy, drag into any app, pin on screen, or save. They wait there until you need them.")
-                feature("pencil.tip.crop.circle", "Mark up in seconds", "Arrows, boxes, highlights, text, redaction and crop.")
+                feature("pencil.tip.crop.circle", "Mark up in seconds", "Pen, arrows, boxes, highlights, text, redaction and crop.")
                 feature("text.magnifyingglass", "Find it by what's in it", "Search for any word you saw in a screenshot.")
                 feature("lock.shield", "Private", "Captures and their text stay on your Mac. Nothing is uploaded.")
             }
@@ -236,13 +236,13 @@ struct HowTo: View {
         step("tray.full", "Use it from the shelf",
              "Each capture is copied and lands on the shelf. Click one to copy it again, or drag it into any app or folder.")
         step("pencil.tip.crop.circle", "Mark it up",
-             "Double-click a capture for arrows, boxes, highlights, text, redaction and crop. Done adds an edited copy; the original stays.")
+             "Double-click a capture to draw with a pen, or add arrows, boxes, highlights, text, redaction and crop. Done adds an edited copy; the original stays.")
         step("text.viewfinder", "Copy its text",
              "Hover a capture and click the text button to copy the words in it.")
         step("pin", "Pin it on screen",
              "Keeps a capture floating above your windows while you work. Esc closes it.")
         step("text.magnifyingglass", "Find it later: press \(prefs.shelfShortcut.title)",
-             "Opens the shelf. Type any word you remember seeing in the screenshot.")
+             "Opens the shelf. Type any word you remember seeing in the screenshot. The trash button there clears the shelf.")
     }
 
     private func step(_ symbol: String, _ title: String, _ detail: String) -> some View {

@@ -1,12 +1,12 @@
 import AppKit
 
 enum Tool: Int, CaseIterable {
-    case arrow, box, highlight, text, redact, crop
+    case pen, arrow, box, highlight, text, redact, crop
 
-    var title: String { ["Arrow", "Box", "Highlight", "Text", "Redact", "Crop"][rawValue] }
-    var key: String { ["a", "r", "h", "t", "b", "c"][rawValue] }
+    var title: String { ["Pen", "Arrow", "Box", "Highlight", "Text", "Redact", "Crop"][rawValue] }
+    var key: String { ["p", "a", "r", "h", "t", "b", "c"][rawValue] }
     var symbol: String {
-        ["arrow.up.right", "rectangle", "highlighter", "textformat", "rectangle.fill", "crop"][rawValue]
+        ["pencil.tip", "arrow.up.right", "rectangle", "highlighter", "textformat", "rectangle.fill", "crop"][rawValue]
     }
 }
 
@@ -17,6 +17,7 @@ struct Mark {
     var b: CGPoint
     var color: CGColor
     var text = ""
+    var points: [CGPoint] = [] // pen strokes
     var rect: CGRect { CGRect(x: min(a.x, b.x), y: min(a.y, b.y), width: abs(a.x - b.x), height: abs(a.y - b.y)) }
 }
 
@@ -74,6 +75,11 @@ final class Canvas: NSView, NSTextFieldDelegate {
         for m in marks {
             ctx.saveGState()
             switch m.tool {
+            case .pen:
+                ctx.setStrokeColor(m.color); ctx.setLineWidth(lw)
+                ctx.setLineCap(.round); ctx.setLineJoin(.round)
+                ctx.addLines(between: m.points.count > 1 ? m.points : [m.a, m.a]) // a click alone makes a dot
+                ctx.strokePath()
             case .arrow:
                 let angle = atan2(m.b.y - m.a.y, m.b.x - m.a.x), head = lw * 4.5, spread = CGFloat.pi / 7
                 let base = CGPoint(x: m.b.x - cos(angle) * head * 0.8, y: m.b.y - sin(angle) * head * 0.8)
@@ -142,18 +148,20 @@ final class Canvas: NSView, NSTextFieldDelegate {
         let p = convert(event.locationInWindow, from: nil)
         if tool == .text { return startText(at: p) }
         let ip = toImage(p)
-        live = Mark(tool: tool, a: ip, b: ip, color: color.cgColor)
+        live = Mark(tool: tool, a: ip, b: ip, color: color.cgColor, points: [ip])
     }
 
     override func mouseDragged(with event: NSEvent) {
-        live?.b = toImage(convert(event.locationInWindow, from: nil))
+        let p = toImage(convert(event.locationInWindow, from: nil))
+        live?.b = p
+        if tool == .pen { live?.points.append(p) }
         needsDisplay = true
     }
 
     override func mouseUp(with event: NSEvent) {
         guard let m = live else { return }
         live = nil
-        let tiny = m.tool == .arrow ? hypot(m.a.x - m.b.x, m.a.y - m.b.y) < lineWidth * 2 : m.rect.width < 4 || m.rect.height < 4
+        let tiny = m.tool == .pen ? false : m.tool == .arrow ? hypot(m.a.x - m.b.x, m.a.y - m.b.y) < lineWidth * 2 : m.rect.width < 4 || m.rect.height < 4
         if !tiny { marks.append(m) } else { needsDisplay = true }
     }
 
@@ -237,7 +245,7 @@ final class Editor: NSObject, NSWindowDelegate {
             tools.setToolTip("\(t.title) (\(t.key.uppercased()))", forSegment: t.rawValue)
             tools.setWidth(36, forSegment: t.rawValue)
         }
-        tools.selectedSegment = 0
+        tools.selectedSegment = canvas.tool.rawValue
         tools.target = self
         tools.action = #selector(pickTool)
         tools.setAccessibilityLabel("Tool")

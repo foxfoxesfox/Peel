@@ -1,6 +1,6 @@
 {
-  "version": "1.1",
+  "version": "1.2",
   "url": "https://github.com/foxfoxesfox/Peel/raw/main/dist/Peel.dmg",
-  "sha256": "5c510b40d619f37badf5471f09a8c8cab9837ceffee12ff0cde48c2bc74fbced",
-  "notes": "Save straight to Photos.\n\n### Changed\n- **Save adds to your Photos library** by default. macOS asks once, the first time, for permission to add photos only: Peel can't see or read your library. Prefer a folder? Settings \u203a Captures \u203a \"Save button adds to\" \u203a A folder.\n- Settings explain the difference between your saved copies and the shelf's own captures folder."
+  "sha256": "4b7513f2c0c510a8e692befe4064e0a7e2071fd549faf8d62f72178de2915f3b",
+  "notes": "Draw freely, and clear the shelf in one go.\n\n### Added\n- **Pen** in the editor (P): draw anything freehand, in any of the six colours.\n- **Clear Shelf**: the trash button next to the shelf's search, or Clear Shelf\u2026 in the menu bar menu. It asks first, then moves every capture to the Trash (Finder's Put Back restores them). Copies you saved to Photos or a folder stay."
 }

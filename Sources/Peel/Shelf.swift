@@ -10,6 +10,7 @@ final class ShelfModel: ObservableObject {
     var onEdit: (Capture) -> Void = { _ in }
     var onPin: (Capture) -> Void = { _ in }
     var focusSearch: () -> Void = {}
+    var onClear: () -> Void = {}
 
     func say(_ text: String, on capture: Capture) {
         flash[capture.name] = text
@@ -55,6 +56,22 @@ final class Shelf {
         panel.minSize = NSSize(width: 260, height: 260)
         panel.contentView = NSHostingView(rootView: ShelfView(library: library, model: model))
         model.focusSearch = { [weak self] in self?.panel.makeKey() }
+        model.onClear = { [weak self] in self?.clear() }
+    }
+
+    /// Moves every capture to the Trash after asking (Finder's Put Back restores them). Saved copies aren't touched.
+    func clear() {
+        let count = library.items.count
+        guard count > 0 else { return }
+        let alert = NSAlert()
+        alert.messageText = "Clear the shelf?"
+        alert.informativeText = "\(count == 1 ? "1 capture moves" : "\(count) captures move") to the Trash. Copies you saved to Photos or a folder stay."
+        alert.addButton(withTitle: "Move to Trash")
+        alert.addButton(withTitle: "Cancel")
+        hideTimer?.invalidate() // don't slip away while asking
+        hideTimer = nil
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        library.items.forEach(library.remove)
     }
 
     var isVisible: Bool { panel.isVisible }
@@ -115,6 +132,10 @@ struct ShelfView: View {
                     Button { model.query = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .buttonStyle(.borderless).foregroundStyle(.secondary).accessibilityLabel("Clear search")
                 }
+                Button { model.onClear() } label: { Image(systemName: "trash") }
+                    .buttonStyle(.borderless).foregroundStyle(.secondary)
+                    .disabled(library.items.isEmpty)
+                    .help("Clear Shelf…").accessibilityLabel("Clear Shelf")
             }
             .padding(.horizontal, 12).padding(.top, 30).padding(.bottom, 10)
             Divider()

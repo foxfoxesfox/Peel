@@ -3,6 +3,14 @@
 All notable changes to Peel. Newest first.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## [1.2] - 2026-11-21
+
+Draw freely, and clear the shelf in one go.
+
+### Added
+- **Pen** in the editor (P): draw anything freehand, in any of the six colours.
+- **Clear Shelf**: the trash button next to the shelf's search, or Clear Shelf… in the menu bar menu. It asks first, then moves every capture to the Trash (Finder's Put Back restores them). Copies you saved to Photos or a folder stay.
+
 ## [1.1] - 2026-11-02
 
 Save straight to Photos.

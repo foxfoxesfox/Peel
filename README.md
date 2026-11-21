@@ -27,9 +27,10 @@ The first launch opens a short welcome tour: what Peel does, the Screen Recordin
 After a capture, Peel copies it to the clipboard and shows the shelf for a few seconds (both can be turned off). On the shelf:
 
 - **Click** a capture to copy it again. **Drag** it into any app or folder.
-- **Double-click** (or the pencil) to **edit**: Arrow (A), Box (R), Highlight (H), Text (T), Redact (B), Crop (C), with six colours, Undo (⌘Z or Delete). **Done** (Return) adds an edited copy to the shelf and copies it; the original stays.
+- **Double-click** (or the pencil) to **edit**: Pen (P), Arrow (A), Box (R), Highlight (H), Text (T), Redact (B), Crop (C), with six colours, Undo (⌘Z or Delete). **Done** (Return) adds an edited copy to the shelf and copies it; the original stays.
 - Hover for buttons: **Copy**, **Copy Text** (the words Peel read in it), **Pin** (floats above every window; Esc closes it), **Edit**, **Save** (adds a PNG or JPG copy to your Photos library, or to a folder you pick in Settings), **Move to Trash**. Right-click shows the same actions. The first Save to Photos asks for permission to *add* photos only; Peel can't see or read your library.
 - **Search** finds captures by the text in them. Every word you type has to appear, in any order.
+- **Clear Shelf** (the trash button next to search, or the menu bar menu) moves every capture to the Trash after asking. Saved copies stay.
 
 Captures stay on the shelf for a month by default (1 day to forever, in Settings). Older ones go to the Trash, not straight to deletion, and saved copies are never touched. They live in Peel's own folder, `~/Library/Application Support/Peel/Captures` (**Shelf captures › Show in Finder** in Settings), separate from what you save.
 
